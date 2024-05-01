@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -8,25 +8,26 @@ from .models import Post
 from .serializers import PostSerializer
 
 
-@api_view(["GET"])
-def all_posts(request: Request) -> Response:
-    posts = Post.objects.all()
-    serializer = PostSerializer(posts, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+class PostListCreateView(APIView):
+    serializer_class = PostSerializer
 
+    def get(self, request: Request, *args, **kwargs):
+        posts = Post.objects.all()
+        serializer = self.serializer_class(instance=posts, many=True)
 
-@api_view(["POST"])
-def create_post(request: Request) -> Response:
-    """
-    Creates a new Post object based on the request data.
-    """
-    serializer = PostSerializer(data=request.data)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
-    if serializer.is_valid():
-        serializer.save()  # Save the serialized data to create a new Post object
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request: Request, *args, **kwargs):
+        data = request.data
+
+        serializer = self.serializer_class(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+
+            response = {"message": "Post created successfully", "data": serializer.data}
+
+            return Response(data=response, status=status.HTTP_201_CREATED)
 
 
 @api_view(["GET"])
