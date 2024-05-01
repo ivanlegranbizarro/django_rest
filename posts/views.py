@@ -37,3 +37,24 @@ def detail_post(request: Request, id: str) -> Response:
     serializer = PostSerializer(post)
 
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(["DELETE"])
+def delete_post(request: Request, id: str) -> Response:
+    post = get_object_or_404(Post, pk=id)
+    post.delete()
+
+    return Response(
+        {"message": "Post was deleted successfully"}, status=status.HTTP_204_NO_CONTENT
+    )
+
+
+@api_view(["PUT"])
+def update_post(request: Request, id: str) -> Response:
+    post = get_object_or_404(Post, pk=id)
+    serializer = PostSerializer(post, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
