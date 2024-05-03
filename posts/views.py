@@ -24,6 +24,10 @@ class PostUpdateRetrieveDeleteView(
     mixins.RetrieveModelMixin,
     mixins.DestroyModelMixin,
 ):
+
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
+
     def get(self, request: Request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 

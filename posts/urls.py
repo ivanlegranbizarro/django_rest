@@ -7,7 +7,7 @@ app_name = "posts"
 urlpatterns = [
     path("", views.PostListCreateView.as_view(), name="post-list-create-view"),
     path(
-        "<str:id>",
+        "<str:pk>",
         views.PostUpdateRetrieveDeleteView.as_view(),
         name="post-retrieve-update-delete-view",
     ),
