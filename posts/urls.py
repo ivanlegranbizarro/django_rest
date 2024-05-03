@@ -8,7 +8,7 @@ urlpatterns = [
     path("", views.PostListCreateView.as_view(), name="post-list-create-view"),
     path(
         "<str:id>",
-        views.PostRetrieveUpdateDeleteView.as_view(),
+        views.PostUpdateRetrieveDeleteView.as_view(),
         name="post-retrieve-update-delete-view",
     ),
 ]
