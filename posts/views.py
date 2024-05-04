@@ -2,6 +2,8 @@ from rest_framework import generics, mixins
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.request import Request
 
+from posts.permissions import OnlyOwnerCanEditOrDelete
+
 from .models import Post
 from .serializers import PostSerializer
 
@@ -28,6 +30,9 @@ class PostUpdateRetrieveDeleteView(
 ):
 
     serializer_class = PostSerializer
+    permission_classes = [
+        OnlyOwnerCanEditOrDelete,
+    ]
     queryset = Post.objects.all()
 
     def get(self, request: Request, *args, **kwargs):
