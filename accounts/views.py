@@ -1,5 +1,6 @@
 from rest_framework.authtoken.models import Token
 from rest_framework import generics, status
+from rest_framework.permissions import AllowAny
 from django.contrib.auth import authenticate
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -12,6 +13,8 @@ from accounts.serializers import SignupSerializer
 
 
 class ListOfAllUsers(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+
     def get(self, request: Request) -> Response:
         users = User.objects.all()
         serializer = SignupSerializer(instance=users, many=True)
@@ -21,6 +24,7 @@ class ListOfAllUsers(generics.GenericAPIView):
 
 class SignUpView(generics.GenericAPIView):
     serializer_class = SignupSerializer
+    permission_classes = [AllowAny]
 
     def post(self, request: Request) -> Response:
         data = request.data
@@ -36,6 +40,8 @@ class SignUpView(generics.GenericAPIView):
 
 
 class LoginView(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request: Request):
         email = request.data.get("email")
         password = request.data.get("password")

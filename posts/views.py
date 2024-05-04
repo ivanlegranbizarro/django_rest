@@ -1,4 +1,5 @@
 from rest_framework import generics, mixins
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.request import Request
 
 from .models import Post
@@ -9,6 +10,7 @@ class PostListCreateView(
     generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin
 ):
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Post.objects.all()
 
     def get(self, request: Request, *args, **kwargs):
