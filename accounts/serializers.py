@@ -1,5 +1,6 @@
-from rest_framework import serializers
 from django.core.validators import MaxLengthValidator, MinLengthValidator
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 
 from accounts.models import User
 
@@ -17,4 +18,7 @@ class SignupSerializer(serializers.ModelSerializer):
         user = User.objects.create(**validated_data)
         user.set_password(validated_data["password"])
         user.save()
+
+        Token.objects.create(user=user)
+
         return user
