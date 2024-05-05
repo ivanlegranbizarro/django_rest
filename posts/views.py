@@ -8,6 +8,15 @@ from .models import Post
 from .serializers import PostSerializer
 
 
+class PostForCurrentUserView(generics.ListAPIView):
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        current_user = self.request.user
+
+        return Post.objects.filter(author=current_user)
+
+
 class PostListCreateView(
     generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin
 ):

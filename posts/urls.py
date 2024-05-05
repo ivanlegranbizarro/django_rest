@@ -11,4 +11,5 @@ urlpatterns = [
         views.PostUpdateRetrieveDeleteView.as_view(),
         name="post-retrieve-update-delete-view",
     ),
+    path("your-posts/", views.PostForCurrentUserView.as_view(), name="your-posts"),
 ]
