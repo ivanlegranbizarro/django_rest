@@ -6,6 +6,13 @@ from posts.permissions import OnlyOwnerCanEditOrDelete
 
 from .models import Post
 from .serializers import PostSerializer
+from rest_framework.pagination import PageNumberPagination
+
+
+class CustomPaginator(PageNumberPagination):
+    page_size = 3
+    page_query_param = "page"
+    page_size_query_param = "page_size"
 
 
 class PostForCurrentUserView(generics.ListAPIView):
@@ -22,6 +29,7 @@ class PostListCreateView(
 ):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = CustomPaginator
     queryset = Post.objects.all()
 
     def get(self, request: Request, *args, **kwargs):
