@@ -1,5 +1,5 @@
 from rest_framework import generics, mixins
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.request import Request
 
 from posts.permissions import OnlyOwnerCanEditOrDelete
@@ -28,7 +28,7 @@ class PostListCreateView(
     generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin
 ):
     serializer_class = PostSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = CustomPaginator
     queryset = Post.objects.all().order_by("-created_at")
 
